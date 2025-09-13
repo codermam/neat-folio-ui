@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Transaction, CategorySummary, MonthlySummary, BudgetGoal, TransactionFilters } from '@/types/budget';
+import { Transaction, CategorySummary, MonthlySummary } from '@/types/budget';
 
 export function useBudget() {
   const [transactions, setTransactions] = useState<Transaction[]>(() => {
@@ -7,20 +7,9 @@ export function useBudget() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [budgetGoals, setBudgetGoals] = useState<BudgetGoal[]>(() => {
-    const saved = localStorage.getItem('budget-goals');
-    return saved ? JSON.parse(saved) : [];
-  });
-
-  const [filters, setFilters] = useState<TransactionFilters>({});
-
   useEffect(() => {
     localStorage.setItem('budget-transactions', JSON.stringify(transactions));
   }, [transactions]);
-
-  useEffect(() => {
-    localStorage.setItem('budget-goals', JSON.stringify(budgetGoals));
-  }, [budgetGoals]);
 
   const addTransaction = (transaction: Omit<Transaction, 'id' | 'createdAt'>) => {
     const newTransaction: Transaction = {
@@ -79,74 +68,12 @@ export function useBudget() {
     }));
   };
 
-  const addBudgetGoal = (goal: Omit<BudgetGoal, 'id'>) => {
-    const newGoal: BudgetGoal = {
-      ...goal,
-      id: crypto.randomUUID(),
-    };
-    setBudgetGoals(prev => [...prev, newGoal]);
-  };
-
-  const updateBudgetGoal = (id: string, updates: Partial<BudgetGoal>) => {
-    setBudgetGoals(prev => 
-      prev.map(goal => goal.id === id ? { ...goal, ...updates } : goal)
-    );
-  };
-
-  const deleteBudgetGoal = (id: string) => {
-    setBudgetGoals(prev => prev.filter(goal => goal.id !== id));
-  };
-
-  const getFilteredTransactions = () => {
-    return transactions.filter(transaction => {
-      // Category filter
-      if (filters.category && transaction.category !== filters.category) {
-        return false;
-      }
-
-      // Date range filter
-      if (filters.dateStart && transaction.date < filters.dateStart) {
-        return false;
-      }
-      if (filters.dateEnd && transaction.date > filters.dateEnd) {
-        return false;
-      }
-
-      // Amount range filter
-      if (filters.amountMin && transaction.amount < filters.amountMin) {
-        return false;
-      }
-      if (filters.amountMax && transaction.amount > filters.amountMax) {
-        return false;
-      }
-
-      // Search filter
-      if (filters.search && !transaction.description.toLowerCase().includes(filters.search.toLowerCase())) {
-        return false;
-      }
-
-      return true;
-    });
-  };
-
-  const clearFilters = () => {
-    setFilters({});
-  };
-
   return {
     transactions,
-    filteredTransactions: getFilteredTransactions(),
-    filters,
-    budgetGoals,
     addTransaction,
     updateTransaction,
     deleteTransaction,
     getMonthlyTotals,
     getCategorySummaries,
-    addBudgetGoal,
-    updateBudgetGoal,
-    deleteBudgetGoal,
-    setFilters,
-    clearFilters,
   };
 }

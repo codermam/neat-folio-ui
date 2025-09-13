@@ -5,8 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Checkbox } from '@/components/ui/checkbox';
-import { PlusCircle, DollarSign, Repeat } from 'lucide-react';
+import { PlusCircle, DollarSign } from 'lucide-react';
 import { Transaction, EXPENSE_CATEGORIES, INCOME_CATEGORIES } from '@/types/budget';
 import { useToast } from '@/hooks/use-toast';
 
@@ -20,8 +19,6 @@ export function TransactionForm({ onSubmit }: TransactionFormProps) {
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [recurring, setRecurring] = useState(false);
-  const [frequency, setFrequency] = useState<'weekly' | 'monthly'>('monthly');
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -52,15 +49,12 @@ export function TransactionForm({ onSubmit }: TransactionFormProps) {
       category,
       description,
       date,
-      ...(recurring && { recurring: true, frequency }),
     });
 
     // Reset form
     setAmount('');
     setCategory('');
     setDescription('');
-    setRecurring(false);
-    setFrequency('monthly');
     
     toast({
       title: "Transaction Added",
@@ -166,36 +160,6 @@ export function TransactionForm({ onSubmit }: TransactionFormProps) {
               onChange={(e) => setDate(e.target.value)}
               className="transition-smooth focus:shadow-glow"
             />
-          </div>
-
-          {/* Recurring Transaction */}
-          <div className="space-y-4 p-4 border border-border/50 rounded-lg bg-muted/30">
-            <div className="flex items-center space-x-3">
-              <Checkbox
-                id="recurring"
-                checked={recurring}
-                onCheckedChange={(checked) => setRecurring(checked as boolean)}
-              />
-              <Label htmlFor="recurring" className="text-sm font-medium flex items-center gap-2 cursor-pointer">
-                <Repeat className="h-4 w-4 text-primary" />
-                Make this recurring
-              </Label>
-            </div>
-            
-            {recurring && (
-              <div className="space-y-2 animate-fade-in">
-                <Label className="text-sm font-medium">Frequency</Label>
-                <Select value={frequency} onValueChange={(value) => setFrequency(value as 'weekly' | 'monthly')}>
-                  <SelectTrigger className="transition-smooth focus:shadow-glow">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="weekly">Weekly</SelectItem>
-                    <SelectItem value="monthly">Monthly</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
           </div>
 
           <Button type="submit" className="w-full gradient-primary transition-spring hover:shadow-glow hover:scale-105 text-lg font-semibold py-6 group">
