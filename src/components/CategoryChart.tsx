@@ -91,15 +91,18 @@ export function CategoryChart({ data }: CategoryChartProps) {
   };
 
   return (
-    <Card className="transition-smooth hover:shadow-lg">
-      <CardHeader className="gradient-card">
-        <CardTitle className="flex items-center gap-2">
-          <PieChartIcon className="h-5 w-5 text-primary" />
-          Expense Categories
-          <span className="text-sm font-normal text-muted-foreground ml-auto">
+    <Card className="transition-spring hover-lift border-0 shadow-xl overflow-hidden animate-fade-in-up stagger-3">
+      <CardHeader className="gradient-hero relative overflow-hidden">
+        <CardTitle className="flex items-center gap-3 text-primary-foreground text-lg font-bold relative z-10">
+          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm animate-pulse-subtle">
+            <PieChartIcon className="h-5 w-5 drop-shadow-sm" />
+          </div>
+          📊 Expense Categories
+          <span className="text-sm font-normal text-primary-foreground/80 ml-auto bg-white/10 px-3 py-1 rounded-full backdrop-blur-sm">
             This Month
           </span>
         </CardTitle>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-float" style={{ animationDelay: '2s' }}></div>
       </CardHeader>
       <CardContent className="p-6">
         <div className="h-80">
@@ -136,19 +139,25 @@ export function CategoryChart({ data }: CategoryChartProps) {
           {data.map((item, index) => {
             const categoryInfo = EXPENSE_CATEGORIES.find(cat => cat.id === item.category);
             return (
-              <div key={item.category} className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-smooth">
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: getHSLFromCategory(item.category) }}
-                  />
-                  <span className="font-medium text-foreground">
+              <div key={item.category} className="flex items-center justify-between p-4 rounded-xl glass-card hover-glow transition-spring group animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <div 
+                      className="w-5 h-5 rounded-full shadow-lg transition-transform group-hover:scale-125"
+                      style={{ backgroundColor: getHSLFromCategory(item.category) }}
+                    />
+                    <div 
+                      className="absolute inset-0 w-5 h-5 rounded-full animate-pulse opacity-50"
+                      style={{ backgroundColor: getHSLFromCategory(item.category) }}
+                    />
+                  </div>
+                  <span className="font-semibold text-foreground group-hover:text-primary transition-colors">
                     {categoryInfo?.name || item.category}
                   </span>
                 </div>
-                <div className="text-right">
-                  <p className="font-semibold text-foreground">${item.amount.toFixed(2)}</p>
-                  <p className="text-xs text-muted-foreground">
+                <div className="text-right group-hover:scale-105 transition-transform">
+                  <p className="font-bold text-foreground text-lg">${item.amount.toFixed(2)}</p>
+                  <p className="text-xs text-muted-foreground font-medium">
                     {item.percentage.toFixed(1)}% • {item.count} transactions
                   </p>
                 </div>

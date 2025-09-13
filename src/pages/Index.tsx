@@ -26,22 +26,26 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="gradient-card border-b border-border/50 sticky top-0 z-10 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-6">
+      <header className="gradient-hero border-b border-border/30 sticky top-0 z-10 backdrop-blur-md shadow-lg">
+        <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg gradient-primary shadow-glow">
-                <Wallet className="h-6 w-6 text-primary-foreground" />
+            <div className="flex items-center gap-4 animate-fade-in-up">
+              <div className="p-3 rounded-xl gradient-glass shadow-glow animate-float">
+                <Wallet className="h-7 w-7 text-primary-foreground drop-shadow-sm" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">Budget Tracker</h1>
-                <p className="text-sm text-muted-foreground">{currentMonth}</p>
+                <h1 className="text-3xl font-bold text-primary-foreground drop-shadow-sm">
+                  Budget Tracker
+                </h1>
+                <p className="text-primary-foreground/80 font-medium">{currentMonth}</p>
               </div>
             </div>
-            <div className="hidden sm:flex items-center gap-4 text-sm text-muted-foreground">
-              <span>{transactions.length} transactions</span>
-              <span>•</span>
-              <span>Track your finances</span>
+            <div className="hidden sm:flex items-center gap-6 text-sm text-primary-foreground/90 animate-fade-in-up stagger-1">
+              <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-full backdrop-blur-sm">
+                <div className="w-2 h-2 bg-success rounded-full animate-pulse-subtle"></div>
+                <span className="font-medium">{transactions.length} transactions</span>
+              </div>
+              <span className="hidden md:block font-medium">💰 Track your finances</span>
             </div>
           </div>
         </div>

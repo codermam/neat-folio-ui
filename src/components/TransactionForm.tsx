@@ -65,12 +65,15 @@ export function TransactionForm({ onSubmit }: TransactionFormProps) {
   const categories = type === 'expense' ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
 
   return (
-    <Card className="transition-smooth hover:shadow-lg">
-      <CardHeader className="gradient-card">
-        <CardTitle className="flex items-center gap-2 text-foreground">
-          <PlusCircle className="h-5 w-5 text-primary" />
+    <Card className="transition-spring hover-lift border-0 shadow-xl overflow-hidden animate-fade-in-up stagger-2">
+      <CardHeader className="gradient-hero relative overflow-hidden">
+        <CardTitle className="flex items-center gap-3 text-primary-foreground text-lg font-bold relative z-10">
+          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+            <PlusCircle className="h-5 w-5 drop-shadow-sm" />
+          </div>
           Add Transaction
         </CardTitle>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 animate-float"></div>
       </CardHeader>
       <CardContent className="space-y-6 p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -159,9 +162,11 @@ export function TransactionForm({ onSubmit }: TransactionFormProps) {
             />
           </div>
 
-          <Button type="submit" className="w-full gradient-primary transition-bounce hover:shadow-glow">
-            <PlusCircle className="h-4 w-4 mr-2" />
-            Add {type === 'income' ? 'Income' : 'Expense'}
+          <Button type="submit" className="w-full gradient-primary transition-spring hover:shadow-glow hover:scale-105 text-lg font-semibold py-6 group">
+            <PlusCircle className="h-5 w-5 mr-2 group-hover:rotate-180 transition-transform duration-300" />
+            <span className="group-hover:scale-105 transition-transform">
+              Add {type === 'income' ? '💰 Income' : '💳 Expense'}
+            </span>
           </Button>
         </form>
       </CardContent>

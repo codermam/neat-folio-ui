@@ -55,26 +55,33 @@ export function SummaryCards({ income, expenses, balance }: SummaryCardsProps) {
       {cards.map((card, index) => (
         <Card 
           key={card.title} 
-          className={`${card.gradient} transition-smooth hover:shadow-lg hover:scale-105 transform`}
-          style={{ animationDelay: `${index * 100}ms` }}
+          className={`${card.gradient} transition-spring hover-lift border-0 shadow-lg overflow-hidden animate-fade-in-up stagger-${index + 1} group`}
         >
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className={`text-sm font-medium ${card.textColor}`}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 relative">
+            <CardTitle className={`text-sm font-medium ${card.textColor} transition-smooth group-hover:scale-105`}>
               {card.title}
             </CardTitle>
-            <div className={`p-2 rounded-lg ${card.iconBg}`}>
-              <card.icon className={`h-4 w-4 ${card.iconColor}`} />
+            <div className={`p-3 rounded-xl ${card.iconBg} shadow-inner transition-spring group-hover:scale-110 group-hover:rotate-12`}>
+              <card.icon className={`h-5 w-5 ${card.iconColor} drop-shadow-sm`} />
             </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
           </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${card.textColor}`}>
+          <CardContent className="relative">
+            <div className={`text-3xl font-bold ${card.textColor} transition-smooth group-hover:scale-105 tracking-tight`}>
               {card.isPercentage ? (
-                `${card.value.toFixed(1)}%`
+                <>
+                  <span className="text-4xl">{card.value.toFixed(1)}</span>
+                  <span className="text-2xl opacity-80">%</span>
+                </>
               ) : (
-                `$${Math.abs(card.value).toLocaleString('en-US', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}`
+                <>
+                  <span className="text-lg opacity-80">$</span>
+                  <span className="text-3xl">{Math.abs(card.value).toLocaleString('en-US', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  })}</span>
+                  <span className="text-lg opacity-60">.{(Math.abs(card.value) % 1).toFixed(2).slice(2)}</span>
+                </>
               )}
             </div>
             {!card.isPercentage && (
