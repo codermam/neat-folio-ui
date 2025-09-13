@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Wallet } from 'lucide-react';
+import { Wallet, Download } from 'lucide-react';
 import { useBudget } from '@/hooks/useBudget';
 import { SummaryCards } from '@/components/SummaryCards';
 import { TransactionForm } from '@/components/TransactionForm';
 import { TransactionList } from '@/components/TransactionList';
 import { CategoryChart } from '@/components/CategoryChart';
+import { Button } from '@/components/ui/button';
+import { generatePDFReport } from '@/lib/pdfGenerator';
 
 const Index = () => {
   const { 
@@ -23,6 +25,15 @@ const Index = () => {
     year: 'numeric' 
   });
 
+  const handleDownloadReport = () => {
+    generatePDFReport({
+      monthlyTotals,
+      categorySummaries,
+      transactions,
+      currentMonth
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -40,12 +51,23 @@ const Index = () => {
                 <p className="text-primary-foreground/80 font-medium">{currentMonth}</p>
               </div>
             </div>
-            <div className="hidden sm:flex items-center gap-6 text-sm text-primary-foreground/90 animate-fade-in-up stagger-1">
-              <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-full backdrop-blur-sm">
-                <div className="w-2 h-2 bg-success rounded-full animate-pulse-subtle"></div>
-                <span className="font-medium">{transactions.length} transactions</span>
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex items-center gap-6 text-sm text-primary-foreground/90 animate-fade-in-up stagger-1">
+                <div className="flex items-center gap-2 bg-white/10 px-3 py-2 rounded-full backdrop-blur-sm">
+                  <div className="w-2 h-2 bg-success rounded-full animate-pulse-subtle"></div>
+                  <span className="font-medium">{transactions.length} transactions</span>
+                </div>
+                <span className="hidden md:block font-medium">💰 Track your finances</span>
               </div>
-              <span className="hidden md:block font-medium">💰 Track your finances</span>
+              <Button
+                onClick={handleDownloadReport}
+                variant="outline"
+                size="sm"
+                className="bg-white/10 border-white/20 text-primary-foreground hover:bg-white/20 backdrop-blur-sm animate-fade-in-up stagger-2"
+              >
+                <Download className="w-4 h-4" />
+                <span className="hidden sm:inline">Download Report</span>
+              </Button>
             </div>
           </div>
         </div>
