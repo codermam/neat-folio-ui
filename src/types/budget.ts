@@ -6,6 +6,24 @@ export interface Transaction {
   description: string;
   date: string;
   createdAt: Date;
+  recurring?: boolean;
+  frequency?: 'weekly' | 'monthly';
+}
+
+export interface BudgetGoal {
+  id: string;
+  category: string;
+  limit: number;
+  month: string;
+}
+
+export interface TransactionFilters {
+  category?: string;
+  dateStart?: string;
+  dateEnd?: string;
+  amountMin?: number;
+  amountMax?: number;
+  search?: string;
 }
 
 export interface CategorySummary {

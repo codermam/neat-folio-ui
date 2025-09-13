@@ -5,16 +5,27 @@ import { SummaryCards } from '@/components/SummaryCards';
 import { TransactionForm } from '@/components/TransactionForm';
 import { TransactionList } from '@/components/TransactionList';
 import { CategoryChart } from '@/components/CategoryChart';
+import { FiltersBar } from '@/components/FiltersBar';
+import { RecurringList } from '@/components/RecurringList';
+import { BudgetGoals } from '@/components/BudgetGoals';
 import { Button } from '@/components/ui/button';
 import { generatePDFReport } from '@/lib/pdfGenerator';
 
 const Index = () => {
   const { 
     transactions, 
+    filteredTransactions,
+    filters,
+    budgetGoals,
     addTransaction, 
     deleteTransaction, 
     getMonthlyTotals, 
-    getCategorySummaries 
+    getCategorySummaries,
+    addBudgetGoal,
+    updateBudgetGoal,
+    deleteBudgetGoal,
+    setFilters,
+    clearFilters,
   } = useBudget();
 
   const monthlyTotals = getMonthlyTotals();
@@ -83,6 +94,15 @@ const Index = () => {
           />
         </section>
 
+        {/* Filters Bar */}
+        <section>
+          <FiltersBar
+            filters={filters}
+            onFiltersChange={setFilters}
+            onClearFilters={clearFilters}
+          />
+        </section>
+
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Add Transaction Form */}
@@ -96,12 +116,41 @@ const Index = () => {
           </div>
         </div>
 
+        {/* Budget Goals & Recurring Transactions Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Budget Goals */}
+          <div>
+            <BudgetGoals
+              budgetGoals={budgetGoals}
+              categorySummaries={categorySummaries}
+              onAddGoal={addBudgetGoal}
+              onUpdateGoal={updateBudgetGoal}
+              onDeleteGoal={deleteBudgetGoal}
+            />
+          </div>
+
+          {/* Recurring Transactions */}
+          <div>
+            <RecurringList
+              transactions={transactions}
+              onAddRecurring={addTransaction}
+            />
+          </div>
+        </div>
+
         {/* Transaction List */}
         <section>
           <TransactionList 
-            transactions={transactions}
+            transactions={filteredTransactions}
             onDelete={deleteTransaction}
           />
+          {filteredTransactions.length !== transactions.length && (
+            <div className="mt-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+              <p className="text-sm text-primary font-medium text-center">
+                📊 Showing {filteredTransactions.length} of {transactions.length} transactions
+              </p>
+            </div>
+          )}
         </section>
       </main>
 
